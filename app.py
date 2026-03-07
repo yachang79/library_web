@@ -73,6 +73,11 @@ def index():
     return render_template('index.html', stats=stats, recent=recent)
 
 
+@app.route('/healthz')
+def healthz():
+    return {'status': 'ok'}, 200
+
+
 # ── 會員管理 ──────────────────────────────────────────
 @app.route('/members')
 def members():
