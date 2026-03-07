@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}借閱記錄 - 圖書館借閱系統{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-arrow-left-right me-2"></i>借閱記錄</h2>
+  <a href="{{ url_for('borrowing_new') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle me-1"></i> 新增借閱
+  </a>
+</div>
+
+<div class="mb-3 d-flex gap-2">
+  <a href="{{ url_for('borrowings', status='borrowed') }}"
+     class="btn btn-sm {% if status_filter == 'borrowed' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+    借出中
+  </a>
+  <a href="{{ url_for('borrowings', status='returned') }}"
+     class="btn btn-sm {% if status_filter == 'returned' %}btn-success{% else %}btn-outline-success{% endif %}">
+    已歸還
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>會員</th>
+          <th>書名</th>
+          <th>流水號</th>
+          <th>借閱日期</th>
+          <th>歸還日期</th>
+          <th class="text-center">狀態</th>
+          {% if status_filter == 'borrowed' %}<th class="text-center">操作</th>{% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in borrowings %}
+        <tr>
+          <td class="text-muted">{{ r.id }}</td>
+          <td>
+            <span class="fw-semibold">{{ r.member_name }}</span>
+            <small class="text-muted d-block">{{ r.member_code }}</small>
+          </td>
+          <td>{{ r.book_title }}</td>
+          <td><code>{{ r.serial_no }}</code></td>
+          <td>{{ r.borrow_date }}</td>
+          <td>{{ r.return_date or '-' }}</td>
+          <td class="text-center">
+            {% if r.status == 'borrowed' %}
+              <span class="badge badge-borrowed px-2 py-1">借出中</span>
+            {% else %}
+              <span class="badge badge-available px-2 py-1">已歸還</span>
+            {% endif %}
+          </td>
+          {% if status_filter == 'borrowed' %}
+          <td class="text-center">
+            {% if r.status == 'borrowed' %}
+            <form method="post" action="{{ url_for('borrowing_return', brid=r.id) }}"
+                  onsubmit="return confirm('確定登記歸還「{{ r.book_title }}」？')">
+              <button class="btn btn-sm btn-success">
+                <i class="bi bi-check2-circle me-1"></i> 歸還
+              </button>
+            </form>
+            {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="{% if status_filter == 'borrowed' %}8{% else %}7{% endif %}"
+              class="text-center text-muted py-4">
+            沒有{% if status_filter == 'borrowed' %}借出中{% else %}已歸還{% endif %}的記錄
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

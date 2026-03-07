@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}圖書管理 - 圖書館借閱系統{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-journal-bookmark me-2"></i>圖書管理</h2>
+  <a href="{{ url_for('book_new') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle me-1"></i> 新增圖書
+  </a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="搜尋書名、流水號、作者...">
+      <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+      {% if q %}<a href="{{ url_for('books') }}" class="btn btn-outline-danger"><i class="bi bi-x"></i></a>{% endif %}
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>書名</th>
+          <th>流水號</th>
+          <th>作者</th>
+          <th>出版日期</th>
+          <th class="text-center">狀態</th>
+          <th class="text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in book_list %}
+        {% set b = item.book %}
+        <tr>
+          <td class="text-muted">{{ b.id }}</td>
+          <td class="fw-semibold">{{ b.title }}</td>
+          <td><code>{{ b.serial_no }}</code></td>
+          <td>{{ b.author or '-' }}</td>
+          <td>{{ b.publish_date or '-' }}</td>
+          <td class="text-center">
+            {% if item.is_borrowed %}
+              <span class="badge badge-borrowed px-2 py-1">借出中</span>
+            {% else %}
+              <span class="badge badge-available px-2 py-1">可借閱</span>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            <a href="{{ url_for('book_edit', bid=b.id) }}" class="btn btn-sm btn-outline-primary me-1">
+              <i class="bi bi-pencil"></i> 編輯
+            </a>
+            <form method="post" action="{{ url_for('book_delete', bid=b.id) }}" class="d-inline"
+                  onsubmit="return confirm('確定刪除書籍「{{ b.title }}」？')">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> 刪除</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">沒有符合的圖書資料</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

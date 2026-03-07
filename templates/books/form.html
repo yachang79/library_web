@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{% if action == 'new' %}新增圖書{% else %}編輯圖書{% endif %} - 圖書館借閱系統{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>
+    <i class="bi bi-journal-{% if action == 'new' %}plus{% else %}pen{% endif %} me-2"></i>
+    {% if action == 'new' %}新增圖書{% else %}編輯圖書{% endif %}
+  </h2>
+  <a href="{{ url_for('books') }}" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left me-1"></i> 返回列表
+  </a>
+</div>
+
+<div class="card" style="max-width: 560px;">
+  <div class="card-body p-4">
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">書名 <span class="text-danger">*</span></label>
+        <input type="text" name="title" class="form-control" value="{{ form.title or '' }}" required placeholder="請輸入書名">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">流水號 <span class="text-danger">*</span></label>
+        <input type="text" name="serial_no" class="form-control" value="{{ form.serial_no or '' }}" required placeholder="例：B0001">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">作者</label>
+        <input type="text" name="author" class="form-control" value="{{ form.author or '' }}" placeholder="請輸入作者姓名">
+      </div>
+      <div class="mb-4">
+        <label class="form-label fw-semibold">出版日期</label>
+        <input type="date" name="publish_date" class="form-control" value="{{ form.publish_date or '' }}">
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary px-4">
+          <i class="bi bi-check-lg me-1"></i> {% if action == 'new' %}新增{% else %}儲存{% endif %}
+        </button>
+        <a href="{{ url_for('books') }}" class="btn btn-outline-secondary">取消</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

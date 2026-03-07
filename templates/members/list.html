@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}會員管理 - 圖書館借閱系統{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-people me-2"></i>會員管理</h2>
+  <a href="{{ url_for('member_new') }}" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i> 新增會員
+  </a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="搜尋姓名、會員編號、電話...">
+      <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+      {% if q %}<a href="{{ url_for('members') }}" class="btn btn-outline-danger"><i class="bi bi-x"></i></a>{% endif %}
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>姓名</th>
+          <th>會員編號</th>
+          <th>電話</th>
+          <th>地址</th>
+          <th>加入日期</th>
+          <th class="text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr>
+          <td class="text-muted">{{ m.id }}</td>
+          <td class="fw-semibold">{{ m.name }}</td>
+          <td><span class="badge bg-secondary">{{ m.member_id }}</span></td>
+          <td>{{ m.phone or '-' }}</td>
+          <td>{{ m.address or '-' }}</td>
+          <td>{{ m.created_at }}</td>
+          <td class="text-center">
+            <a href="{{ url_for('member_edit', mid=m.id) }}" class="btn btn-sm btn-outline-primary me-1">
+              <i class="bi bi-pencil"></i> 編輯
+            </a>
+            <form method="post" action="{{ url_for('member_delete', mid=m.id) }}" class="d-inline"
+                  onsubmit="return confirm('確定刪除會員「{{ m.name }}」？')">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> 刪除</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">沒有符合的會員資料</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

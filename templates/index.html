@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}首頁總覽 - 圖書館借閱系統{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2><i class="bi bi-house me-2"></i>首頁總覽</h2>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-4">
+    <div class="card text-center p-4">
+      <div class="display-4 fw-bold text-primary">{{ stats.members }}</div>
+      <div class="text-muted mt-1"><i class="bi bi-people me-1"></i>註冊會員數</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center p-4">
+      <div class="display-4 fw-bold text-success">{{ stats.books }}</div>
+      <div class="text-muted mt-1"><i class="bi bi-journal-bookmark me-1"></i>館藏圖書數</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center p-4">
+      <div class="display-4 fw-bold text-warning">{{ stats.borrowed }}</div>
+      <div class="text-muted mt-1"><i class="bi bi-arrow-left-right me-1"></i>目前借出中</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header bg-white fw-semibold">
+    <i class="bi bi-clock-history me-1"></i> 最近借閱記錄
+  </div>
+  <div class="card-body p-0">
+    {% if recent %}
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>書名</th>
+          <th>借閱人</th>
+          <th>借閱日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in recent %}
+        <tr>
+          <td>{{ r.title }}</td>
+          <td>{{ r.name }}</td>
+          <td>{{ r.borrow_date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="text-center text-muted py-4">目前無借閱記錄</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}圖書館借閱系統{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .sidebar {
+      min-height: 100vh;
+      background: #1a3a5c;
+      color: #fff;
+      width: 220px;
+      position: fixed;
+      top: 0; left: 0;
+      padding-top: 1rem;
+      z-index: 100;
+    }
+    .sidebar .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.8rem 1.2rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .sidebar .nav-link {
+      color: rgba(255,255,255,0.8);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      margin: 2px 8px;
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.95rem;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .sidebar .nav-section {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.4);
+      padding: 1rem 1.2rem 0.3rem;
+    }
+    .main-content {
+      margin-left: 220px;
+      padding: 1.8rem;
+    }
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .page-header h2 {
+      font-weight: 700;
+      color: #1a3a5c;
+      margin: 0;
+    }
+    .card { border: none; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+    .table thead th { background: #f1f5f9; color: #374151; font-size: 0.85rem; }
+    .badge-borrowed  { background: #fef3c7; color: #92400e; }
+    .badge-available { background: #d1fae5; color: #065f46; }
+  </style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="brand">
+    <i class="bi bi-book-half fs-5"></i> 圖書館系統
+  </div>
+  <div class="mt-2">
+    <div class="nav-section">主選單</div>
+    <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
+      <i class="bi bi-house"></i> 首頁總覽
+    </a>
+
+    <div class="nav-section">資料維護</div>
+    <a class="nav-link {% if 'member' in request.endpoint %}active{% endif %}" href="{{ url_for('members') }}">
+      <i class="bi bi-people"></i> 會員管理
+    </a>
+    <a class="nav-link {% if 'book' in request.endpoint %}active{% endif %}" href="{{ url_for('books') }}">
+      <i class="bi bi-journal-bookmark"></i> 圖書管理
+    </a>
+
+    <div class="nav-section">借閱服務</div>
+    <a class="nav-link {% if 'borrow' in request.endpoint %}active{% endif %}" href="{{ url_for('borrowings') }}">
+      <i class="bi bi-arrow-left-right"></i> 借閱記錄
+    </a>
+    <a class="nav-link" href="{{ url_for('borrowing_new') }}">
+      <i class="bi bi-plus-circle"></i> 新增借閱
+    </a>
+  </div>
+</nav>
+
+<div class="main-content">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
