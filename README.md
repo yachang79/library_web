@@ -72,12 +72,6 @@ library_web/
         └── form.html       # 新增借閱
 ```
 
-## 環境變數
-
-| 變數名稱 | 說明 | 預設值 |
-|---------|------|--------|
-| `SECRET_KEY` | Flask session 加密金鑰 | `library_secret_key_2024`（僅開發用） |
-
 ## License
 
 MIT

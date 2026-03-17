@@ -8,3 +8,4 @@ venv/
 .venv/
 instance/
 codex.txt
+private.txt
