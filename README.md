@@ -2,6 +2,10 @@
 
 以 Flask + SQLite 建置的輕量級圖書館借閱管理系統，支援會員管理、圖書管理與借閱記錄，可部署於 [Render](https://render.com) 平台。
 
+## Demo
+
+**線上展示：** [https://library-web-8vte.onrender.com](https://library-web-8vte.onrender.com)
+
 ## 功能特色
 
 | 模組 | 功能 |
